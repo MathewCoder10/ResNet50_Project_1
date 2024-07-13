@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 
 # Load TFLite model and allocate tensors
-interpreter = tf.lite.Interpreter(model_path="paddy_tf.tflite")
+interpreter = tf.lite.Interpreter(model_path="C:/Users/DELL/Deep_Learning_Projects/Deep_Learning_Project_1/paddy_tf.tflite")
 interpreter.allocate_tensors()
 
 # Get input and output tensors
@@ -13,6 +13,7 @@ output_details = interpreter.get_output_details()
 
 # Function to preprocess the image
 def preprocess_image(image):
+    image = image.convert('RGB')  # Ensure the image is in RGB mode
     image = image.resize((224, 224))  # ResNet-50 input size
     image = np.array(image) / 255.0   # Normalize the image
     image = np.expand_dims(image, axis=0).astype(np.float32)  # Add batch dimension
@@ -29,24 +30,42 @@ def predict(image):
 st.title("Paddy Leaf Disease Prediction")
 
 st.write("Upload an image of a paddy leaf to predict the disease.")
+st.warning("Please ensure you upload an image of a paddy leaf. Uploading other types of images may result in incorrect predictions.")
 
 # Upload image
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    # Display uploaded image
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
+    try:
+        # Display uploaded image
+        image = Image.open(uploaded_file)
+        st.image(image, caption='Uploaded Image.', use_column_width=True)
 
-    # Preprocess the image
-    processed_image = preprocess_image(image)
+        # Preprocess the image
+        processed_image = preprocess_image(image)
 
-    # Make prediction
-    prediction = predict(processed_image)
+        # Make prediction
+        prediction = predict(processed_image)
 
-    # Display prediction
-    disease_classes = ['Healthy', 'Bacterial Leaf Blight', 'Brown Spot', 'Leaf Smut']  # Example disease classes
-    predicted_class = disease_classes[np.argmax(prediction)]
-    confidence = np.max(prediction)
-    
-    st.write(f"Prediction: {predicted_class} with {confidence:.2f} confidence")
+        # Display prediction
+        disease_classes = ["Bacterial_leaf_blight", "Brown_spot", "Healthy", "Leaf_blast", "Leaf_scald", "Narrow_brown_spot"]
+        predicted_class = disease_classes[np.argmax(prediction)]
+        confidence = np.max(prediction) * 100  # Convert to percentage
+
+        # Set a confidence threshold
+        confidence_threshold = 60  # 60%
+
+        if confidence < confidence_threshold:
+            st.warning(f"The model is not confident about the prediction. Please ensure the uploaded image is a clear and proper paddy leaf image.")
+        
+        st.markdown(f"### **Prediction: {predicted_class} with {confidence:.2f}% confidence**")
+
+        # Show top 3 predictions
+        top_3_indices = np.argsort(prediction[0])[-3:][::-1]
+        st.write("### **Top 3 predictions:**")
+        for i in top_3_indices:
+            class_name = disease_classes[i]
+            class_confidence = prediction[0][i] * 100  # Convert to percentage
+            st.markdown(f"**{class_name}: {class_confidence:.2f}%**")
+    except Exception as e:
+        st.error(f"Error processing the image: {e}")

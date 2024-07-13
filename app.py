@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 
 # Load TFLite model and allocate tensors
-interpreter = tf.lite.Interpreter(model_path="C:/Users/DELL/Deep_Learning_Projects/Deep_Learning_Project_1/paddy_tf.tflite")
+interpreter = tf.lite.Interpreter(model_path="paddy_tf.tflite")
 interpreter.allocate_tensors()
 
 # Get input and output tensors
@@ -59,6 +59,10 @@ if uploaded_file is not None:
             st.warning(f"The model is not confident about the prediction. Please ensure the uploaded image is a clear and proper paddy leaf image.")
         
         st.markdown(f"### **Prediction: {predicted_class} with {confidence:.2f}% confidence**")
+
+        # Debug: Show raw prediction output
+        st.write(f"Raw model output: {prediction}")
+        st.write(f"Predicted probabilities: {np.round(prediction, 2)}")
 
         # Show top 3 predictions
         top_3_indices = np.argsort(prediction[0])[-3:][::-1]

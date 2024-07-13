@@ -60,10 +60,6 @@ if uploaded_file is not None:
         
         st.markdown(f"### **Prediction: {predicted_class} with {confidence:.2f}% confidence**")
 
-        # Debug: Show raw prediction output
-        st.write(f"Raw model output: {prediction}")
-        st.write(f"Predicted probabilities: {np.round(prediction, 2)}")
-
         # Show top 3 predictions
         top_3_indices = np.argsort(prediction[0])[-3:][::-1]
         st.write("### **Top 3 predictions:**")

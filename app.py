@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 
 # Load TFLite model and allocate tensors
-interpreter = tf.lite.Interpreter(model_path="C:/Users/DELL/Deep_Learning_Projects/Deep_Learning_Project_1/paddy_tf.tflite")
+interpreter = tf.lite.Interpreter(model_path="paddy_tf.tflite")
 interpreter.allocate_tensors()
 
 # Get input and output tensors

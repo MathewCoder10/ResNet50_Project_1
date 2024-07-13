@@ -27,9 +27,9 @@ def predict(image):
     return output_data
 
 # Streamlit app layout
-st.title("Paddy Leaf Disease Prediction")
+st.title("Paddy Leaf Disease Classification and Prediction")
 
-st.write("Upload an image of a paddy leaf to predict the disease.")
+st.write("Upload an image of a paddy leaf to classify and predict the disease.")
 st.warning("Please ensure you upload an image of a paddy leaf. Uploading other types of images may result in incorrect predictions.")
 
 # Upload image

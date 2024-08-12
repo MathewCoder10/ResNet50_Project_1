@@ -30,7 +30,6 @@ def predict(image):
 st.title("Paddy Leaf Disease Classification and Prediction")
 
 st.write("Upload an image of a paddy leaf to classify and predict the disease.")
-st.warning("Please ensure you upload an image of a paddy leaf. Uploading other types of images may result in incorrect predictions.")
 
 # Upload image
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])

@@ -29,7 +29,6 @@ def predict(image):
 # Streamlit app layout
 st.title("Paddy Leaf Disease Classification and Prediction")
 
-st.write("Upload an image of a paddy leaf to classify and predict the disease.")
 
 # Upload image
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
@@ -59,12 +58,6 @@ if uploaded_file is not None:
         
         st.markdown(f"### **Prediction: {predicted_class} with {confidence:.2f}% confidence**")
 
-        # Show top 3 predictions
-        top_3_indices = np.argsort(prediction[0])[-3:][::-1]
-        st.write("### **Top 3 predictions:**")
-        for i in top_3_indices:
-            class_name = disease_classes[i]
-            class_confidence = prediction[0][i] * 100  # Convert to percentage
-            st.markdown(f"**{class_name}: {class_confidence:.2f}%**")
+        
     except Exception as e:
         st.error(f"Error processing the image: {e}")
